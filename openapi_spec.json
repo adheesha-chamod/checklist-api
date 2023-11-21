@@ -3,7 +3,8 @@
   "info": {
     "title": "Checklist API",
     "version": "1.0.0",
-    "description": "OpenAPI Specification for Checklist API"
+    "summary": "OpenAPI Specification for Checklist API",
+    "description": "OpenAPI Specification for Checklist API developed using OpenAPI Specification v3.1.0"
   },
   "servers": [
     {
@@ -15,6 +16,10 @@
     {
       "name": "Checklists",
       "description": "Operations related to checklists"
+    },
+    {
+      "name": "List Items",
+      "description": "Operations related to list items"
     }
   ],
   "paths": {
@@ -38,6 +43,16 @@
             "description": "Checklist created successfully"
           }
         }
+      },
+      "get": {
+        "tags": ["Checklists"],
+        "summary": "Get all checklists",
+        "operationId": "getChecklists",
+        "responses": {
+          "200": {
+            "description": "Checklists retrieved Successfully"
+          }
+        }
       }
     },
     "/check-lists/{id}": {
@@ -59,7 +74,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful"
+            "description": "Checklist retrieved Successfully"
           }
         }
       },
@@ -112,8 +127,108 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Checklist deleted successfully"
+          }
+        }
+      }
+    },
+    "/list-items": {
+      "post": {
+        "tags": ["List Items"],
+        "summary": "Add a list item",
+        "operationId": "addListItem",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "List item created successfully"
+          }
+        }
+      },
+      "get": {
+        "tags": ["List Items"],
+        "summary": "Get a list item by checklist Id",
+        "operationId": "getListItems",
+        "parameters": [
+          {
+            "name": "checkListId",
+            "in": "query",
+            "required": true,
+            "description": "ID of the checklist to retrive",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List Item retrieved Successfully"
+          }
+        }
+      }
+    },
+    "/list-items/{id}": {
+      "put": {
+        "tags": ["List Items"],
+        "summary": "Update a list item",
+        "operationId": "updateListItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the list item to update",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List item updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["List Items"],
+        "summary": "Delete a list item",
+        "operationId": "deleteListItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the list item to delete",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "List item deleted successfully"
           }
         }
       }
@@ -132,10 +247,31 @@
           },
           "status": {
             "type": "string",
-            "enum": ["TO_DO", "IN_PROGRESS", "DONE"]
+            "enum": ["TO_DO", "IN_PROGRESS", "DONE", "REJECTED", "MARKED_DONE"]
           }
         },
         "required": ["name", "description", "status"]
+      },
+      "ListItem": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["TO_DO", "IN_PROGRESS", "DONE", "REJECTED", "MARKED_DONE"]
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "checkListId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": ["summary", "status", "dueDate", "checkListId"]
       }
     }
   }
