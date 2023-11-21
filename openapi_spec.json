@@ -1,0 +1,142 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Checklist API",
+    "version": "1.0.0",
+    "description": "OpenAPI Specification for Checklist API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/checklist-api/v1",
+      "description": "Local Checklist API Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Checklists",
+      "description": "Operations related to checklists"
+    }
+  ],
+  "paths": {
+    "/check-lists": {
+      "post": {
+        "tags": ["Checklists"],
+        "summary": "Add a new checklist",
+        "operationId": "addChecklist",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckList"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Checklist created successfully"
+          }
+        }
+      }
+    },
+    "/check-lists/{id}": {
+      "get": {
+        "tags": ["Checklists"],
+        "summary": "Find a checklist",
+        "operationId": "getChecklistById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the checklist to find",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Checklists"],
+        "summary": "Update a checklist",
+        "operationId": "updateChecklist",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the checklist to update",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckList"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Checklist updated successfully"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Checklists"],
+        "summary": "Delete a checklist",
+        "operationId": "deleteChecklist",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the checklist to delete",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Checklist deleted successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CheckList": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["TO_DO", "IN_PROGRESS", "DONE"]
+          }
+        },
+        "required": ["name", "description", "status"]
+      }
+    }
+  }
+}
